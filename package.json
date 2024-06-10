@@ -1,0 +1,13 @@
+{
+  "name": "regex-utilities",
+  "version": "0.1.0",
+  "description": "Shared regex utilities",
+  "exports": "./src/index.js",
+  "type": "module",
+  "author": "Steven Levithan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slevithan/regex-utilities.git"
+  }
+}
