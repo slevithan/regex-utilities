@@ -1,4 +1,4 @@
-export const RegexContext = {
+export const Context = {
   DEFAULT: 'DEFAULT',
   CHAR_CLASS: 'CHAR_CLASS',
 };
@@ -11,21 +11,21 @@ Assumes flag v and doesn't worry about syntax errors that are caught by it.
 @param {string} pattern
 @param {string} needle Search as a regex pattern, with flags `su`
 @param {string | (match: RegExpExecArray) => string} replacement
-@param {'DEFAULT' | 'CHAR_CLASS'} [inRegexContext]
+@param {'DEFAULT' | 'CHAR_CLASS'} [inContext]
 @returns {string} Pattern with replacements
 @example
 replaceUnescaped(String.raw`.\.\\.\\\.[[\.].].`, '\\.', '~');
 // -> String.raw`~\.\\~\\\.[[\.]~]~`
-replaceUnescaped(String.raw`.\.\\.\\\.[[\.].].`, '\\.', '~', RegexContext.DEFAULT);
+replaceUnescaped(String.raw`.\.\\.\\\.[[\.].].`, '\\.', '~', Context.DEFAULT);
 // -> String.raw`~\.\\~\\\.[[\.].]~`
 */
-export function replaceUnescaped(pattern, needle, replacement, inRegexContext) {
+export function replaceUnescaped(pattern, needle, replacement, inContext) {
   const re = new RegExp(String.raw`(?<found>${needle})|\\?.`, 'gsu');
   let numCharClassesOpen = 0;
   let result = '';
   for (const match of pattern.matchAll(re)) {
     const {0: m, groups: {found}} = match;
-    if (found && (!inRegexContext || (inRegexContext === RegexContext.DEFAULT) === !numCharClassesOpen)) {
+    if (found && (!inContext || (inContext === Context.DEFAULT) === !numCharClassesOpen)) {
       if (replacement instanceof Function) {
         result += replacement(match);
       } else {
@@ -51,10 +51,10 @@ Assumes flag v and doesn't worry about syntax errors that are caught by it.
 @param {string} pattern
 @param {string} needle Search as a regex pattern, with flags `su`
 @param {(match: RegExpExecArray) => void} [callback]
-@param {'DEFAULT' | 'CHAR_CLASS'} [inRegexContext]
+@param {'DEFAULT' | 'CHAR_CLASS'} [inContext]
 @returns {boolean} Whether the pattern was found
 */
-export function findUnescaped(pattern, needle, callback, inRegexContext) {
+export function findUnescaped(pattern, needle, callback, inContext) {
   // Quick partial test; avoid the loop if not needed
   if (!(new RegExp(needle, 'su')).test(pattern)) {
     return false;
@@ -63,7 +63,7 @@ export function findUnescaped(pattern, needle, callback, inRegexContext) {
   let numCharClassesOpen = 0;
   for (const match of pattern.matchAll(re)) {
     const {0: m, groups: {found}} = match;
-    if (found && (!inRegexContext || (inRegexContext === RegexContext.DEFAULT) === !numCharClassesOpen)) {
+    if (found && (!inContext || (inContext === Context.DEFAULT) === !numCharClassesOpen)) {
       if (callback) {
         callback(match);
       }
@@ -85,9 +85,9 @@ knowledge of what's safe to do given regex syntax.
 Assumes flag v and doesn't worry about syntax errors that are caught by it.
 @param {string} pattern
 @param {string} needle Search as a regex pattern, with flags `su`
-@param {'DEFAULT' | 'CHAR_CLASS'} [inRegexContext]
+@param {'DEFAULT' | 'CHAR_CLASS'} [inContext]
 @returns {boolean} Whether the pattern was found
 */
-export function hasUnescaped(pattern, needle, inRegexContext) {
-  return findUnescaped(pattern, needle, null, inRegexContext);
+export function hasUnescaped(pattern, needle, inContext) {
+  return findUnescaped(pattern, needle, null, inContext);
 }
