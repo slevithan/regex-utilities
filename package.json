@@ -2,12 +2,19 @@
   "name": "regex-utilities",
   "version": "1.0.0",
   "description": "Shared regex utilities",
-  "exports": "./src/index.js",
-  "type": "module",
   "author": "Steven Levithan",
   "license": "MIT",
+  "type": "module",
+  "exports": "./src/index.js",
+  "scripts": {
+    "test": "jasmine",
+    "prepublish": "npm test"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/slevithan/regex-utilities.git"
+  },
+  "devDependencies": {
+    "jasmine": "^5.1.0"
   }
 }
