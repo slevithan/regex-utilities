@@ -12,6 +12,14 @@ describe('replaceUnescaped', () => {
   it('should replace all with string replacement in CHAR_CLASS context', () => {
     expect(replaceUnescaped(String.raw`.\.\\.\\\.[[\.].].`, '\\.', '~', Context.CHAR_CLASS)).toBe(String.raw`.\.\\.\\\.[[\.]~].`);
   });
+
+  it('should replace all using a replacement function and numbered backrefs', () => {
+    expect(replaceUnescaped('%1 %22', '%(\\d+)', ([_, $1]) => `\\${$1}`)).toBe('\\1 \\22');
+  });
+
+  it('should replace all using a replacement function and named backrefs', () => {
+    expect(replaceUnescaped('%1 %22', '%(?<num>\\d+)', ({groups: {num}}) => `\\${num}`)).toBe('\\1 \\22');
+  });
 });
 
 describe('forEachUnescaped', () => {

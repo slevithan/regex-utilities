@@ -22,12 +22,12 @@ replaceUnescaped(String.raw`.\.\\.[[\.].].`, '\\.', '~', Context.CHAR_CLASS);
 // → String.raw`.\.\\.[[\.]~].`
 */
 export function replaceUnescaped(pattern, needle, replacement, context) {
-  const re = new RegExp(String.raw`(?<found>${needle})|\\?.`, 'gsu');
+  const re = new RegExp(String.raw`${needle}|(?<skip>\\?.)`, 'gsu');
   let numCharClassesOpen = 0;
   let result = '';
   for (const match of pattern.matchAll(re)) {
-    const {0: m, groups: {found}} = match;
-    if (found && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
+    const {0: m, groups: {skip}} = match;
+    if (!skip && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
       if (replacement instanceof Function) {
         result += replacement(match);
       } else {
@@ -76,11 +76,11 @@ export function findUnescaped(pattern, needle, callback, context) {
   if (!(new RegExp(needle, 'su')).test(pattern)) {
     return false;
   }
-  const re = new RegExp(String.raw`(?<found>${needle})|\\?.`, 'gsu');
+  const re = new RegExp(String.raw`${needle}|(?<skip>\\?.)`, 'gsu');
   let numCharClassesOpen = 0;
   for (const match of pattern.matchAll(re)) {
-    const {0: m, groups: {found}} = match;
-    if (found && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
+    const {0: m, groups: {skip}} = match;
+    if (!skip && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
       if (callback) {
         callback(match);
       }
