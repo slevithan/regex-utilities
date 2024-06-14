@@ -10,6 +10,9 @@
     "test": "jasmine",
     "prepublish": "npm test"
   },
+  "files": [
+    "src"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/slevithan/regex-utilities.git"
