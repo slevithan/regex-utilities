@@ -1,6 +1,6 @@
 {
   "name": "regex-utilities",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Shared regex utilities",
   "author": "Steven Levithan",
   "license": "MIT",
