@@ -6,8 +6,8 @@ export const Context = {
 /**
 Replaces patterns only when they're unescaped and in the given context.
 Doesn't skip over complete multicharacter tokens (only `\` and folowing char) so must be used with
-knowledge of what's safe to do given regex syntax.
-Assumes flag v and doesn't worry about syntax errors that are caught by it.
+knowledge of what's safe to do given regex syntax. Assumes flag v and doesn't worry about syntax
+errors that are caught by it.
 @param {string} pattern
 @param {string} needle Search as a regex pattern, with flags `su`
 @param {string | (match: RegExpExecArray) => string} replacement
@@ -48,8 +48,8 @@ export function replaceUnescaped(pattern, needle, replacement, context) {
 /**
 Run a callback on each unescaped version of a pattern in the given context.
 Doesn't skip over complete multicharacter tokens (only `\` and folowing char) so must be used with
-knowledge of what's safe to do given regex syntax.
-Assumes flag v and doesn't worry about syntax errors that are caught by it.
+knowledge of what's safe to do given regex syntax. Assumes flag v and doesn't worry about syntax
+errors that are caught by it.
 @param {string} pattern
 @param {string} needle Search as a regex pattern, with flags `su`
 @param {(match: RegExpExecArray) => void} callback
@@ -61,45 +61,48 @@ export function forEachUnescaped(pattern, needle, callback, context) {
 }
 
 /**
-Run a callback on the first unescaped version of a pattern in the given context.
+Return a match array for the first unescaped version of a pattern in the given context, or null.
 Doesn't skip over complete multicharacter tokens (only `\` and folowing char) so must be used with
-knowledge of what's safe to do given regex syntax.
-Assumes flag v and doesn't worry about syntax errors that are caught by it.
+knowledge of what's safe to do given regex syntax. Assumes flag v and doesn't worry about syntax
+errors that are caught by it.
 @param {string} pattern
 @param {string} needle Search as a regex pattern, with flags `su`
-@param {(match: RegExpExecArray) => void} [callback]
+@param {number} [pos] Offset to start the search
 @param {'DEFAULT' | 'CHAR_CLASS'} [context] All contexts if not specified
-@returns {boolean} Whether the pattern was found
+@returns {RegExpExecArray | null}
 */
-export function findUnescaped(pattern, needle, callback, context) {
+export function execUnescaped(pattern, needle, pos = 0, context) {
   // Quick partial test; avoid the loop if not needed
-  if (!(new RegExp(needle, 'su')).test(pattern)) {
-    return false;
+  if (!(new RegExp(needle, 'su').test(pattern))) {
+    return null;
   }
   const re = new RegExp(String.raw`${needle}|(?<skip>\\?.)`, 'gsu');
+  re.lastIndex = pos;
   let numCharClassesOpen = 0;
-  for (const match of pattern.matchAll(re)) {
+  let match;
+  while (match = re.exec(pattern)) {
     const {0: m, groups: {skip}} = match;
     if (!skip && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
-      if (callback) {
-        callback(match);
-      }
-      return true;
+      return match;
     }
     if (m === '[') {
       numCharClassesOpen++;
     } else if (m === ']' && numCharClassesOpen) {
       numCharClassesOpen--;
     }
+    // Avoid an infinite loop on zero-length matches
+    if (re.lastIndex == match.index) {
+      re.lastIndex++;
+    }
   }
-  return false;
+  return null;
 }
 
 /**
 Check whether an unescaped version of a pattern appears in the given context.
 Doesn't skip over complete multicharacter tokens (only `\` and folowing char) so must be used with
-knowledge of what's safe to do given regex syntax.
-Assumes flag v and doesn't worry about syntax errors that are caught by it.
+knowledge of what's safe to do given regex syntax. Assumes flag v and doesn't worry about syntax
+errors that are caught by it.
 @param {string} pattern
 @param {string} needle Search as a regex pattern, with flags `su`
 @param {'DEFAULT' | 'CHAR_CLASS'} [context] All contexts if not specified
@@ -107,5 +110,5 @@ Assumes flag v and doesn't worry about syntax errors that are caught by it.
 */
 export function hasUnescaped(pattern, needle, context) {
   // Do this the easy way
-  return findUnescaped(pattern, needle, null, context);
+  return !!execUnescaped(pattern, needle, 0, context);
 }
