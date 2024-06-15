@@ -112,3 +112,39 @@ export function hasUnescaped(pattern, needle, context) {
   // Do this the easy way
   return !!execUnescaped(pattern, needle, 0, context);
 }
+
+/**
+Given a pattern and start position (just after the group's opening delimiter), return the contents
+of the group, accounting for escaped characters, nested groups, and character classes.
+@param {string} pattern
+@param {number} contentsStartPos
+@returns {string}
+*/
+export function getGroupContents(pattern, contentsStartPos) {
+  const token = /\\?./gsu;
+  token.lastIndex = contentsStartPos;
+  let contentsEndPos = pattern.length;
+  let numCharClassesOpen = 0;
+  // Starting search within an open group, after the group's opening
+  let numGroupsOpen = 1;
+  let match;
+  while (match = token.exec(pattern)) {
+    const [m] = match;
+    if (m === '[') {
+      numCharClassesOpen++;
+    } else if (!numCharClassesOpen) {
+      if (m === '(') {
+        numGroupsOpen++;
+      } else if (m === ')') {
+        numGroupsOpen--;
+        if (!numGroupsOpen) {
+          contentsEndPos = match.index;
+          break;
+        }
+      }
+    } else if (m === ']') {
+      numCharClassesOpen--;
+    }
+  }
+  return pattern.slice(contentsStartPos, contentsEndPos);
+}

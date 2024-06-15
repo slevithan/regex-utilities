@@ -1,4 +1,4 @@
-import {Context, execUnescaped, forEachUnescaped, hasUnescaped, replaceUnescaped} from '../src/index.js';
+import {Context, execUnescaped, forEachUnescaped, getGroupContents, hasUnescaped, replaceUnescaped} from '../src/index.js';
 
 describe('replaceUnescaped', () => {
   it('should replace all with string replacement in all contexts', () => {
@@ -85,5 +85,18 @@ describe('hasUnescaped', () => {
   it('should find match in CHAR_CLASS context', () => {
     expect(hasUnescaped(String.raw`\..`, '\\.', Context.CHAR_CLASS)).toBeFalse();
     expect(hasUnescaped(String.raw`\.[.]`, '\\.', Context.CHAR_CLASS)).toBeTrue();
+  });
+});
+
+describe('getGroupContents', () => {
+  it('should return group contents', () => {
+    const contents = String.raw`a(?:b\)|(?<=())[\(\)])`;
+    expect(getGroupContents(`(${contents})`, 1)).toBe(contents);
+  });
+
+  // Just documenting current behavior; this shouldn't be relied on
+  it('should return the rest of the string if the group is unclosed', () => {
+    const contents = String.raw`a(b)c`;
+    expect(getGroupContents(`(${contents}`, 1)).toBe(contents);
   });
 });
