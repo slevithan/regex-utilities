@@ -1,5 +1,9 @@
 # regex-utilities
 
+[![build status](https://github.com/slevithan/regex-utilities/workflows/CI/badge.svg)](https://github.com/slevithan/regex-utilities/actions)
+[![npm](https://img.shields.io/npm/v/regex-utilities)](https://www.npmjs.com/package/regex-utilities)
+[![bundle size](https://deno.bundlejs.com/badge?q=regex-utilities&treeshake=[*])](https://bundlejs.com/?q=regex-utilities&treeshake=[*])
+
 Tiny utilities shared by the [`regex`](https://github.com/slevithan/regex) library and its extensions. Useful for parsing and processing regular expressions, when you don't need a full regex AST builder.
 
 ## Constants
