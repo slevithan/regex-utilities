@@ -115,7 +115,8 @@ export function hasUnescaped(pattern, needle, context) {
 
 /**
 Given a pattern and start position (just after the group's opening delimiter), return the contents
-of the group, accounting for escaped characters, nested groups, and character classes.
+of the group, accounting for escaped characters, nested groups, and character classes. Returns the
+rest of the string if the group is unclosed.
 @param {string} pattern
 @param {number} contentsStartPos
 @returns {string}

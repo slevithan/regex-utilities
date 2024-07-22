@@ -1,10 +1,6 @@
-# Installed npm modules
 node_modules
+temp
 
 # Folder view configuration/cache files
 .DS_Store
 desktop.ini
-Thumbs.db
-
-# Temp files
-temp

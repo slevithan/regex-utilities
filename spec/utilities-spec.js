@@ -94,7 +94,6 @@ describe('getGroupContents', () => {
     expect(getGroupContents(`(${contents})`, 1)).toBe(contents);
   });
 
-  // Just documenting current behavior; this shouldn't be relied on
   it('should return the rest of the string if the group is unclosed', () => {
     const contents = String.raw`a(b)c`;
     expect(getGroupContents(`(${contents}`, 1)).toBe(contents);
