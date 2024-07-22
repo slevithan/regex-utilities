@@ -1,7 +1,7 @@
 {
   "name": "regex-utilities",
   "version": "2.0.0",
-  "description": "Shared regex utilities",
+  "description": "Tiny regex parsing helpers",
   "author": "Steven Levithan",
   "license": "MIT",
   "type": "module",

@@ -33,8 +33,8 @@ Run a callback on each unescaped version of a pattern in the given context.
 
 ### `replaceUnescaped`
 
-Replaces patterns only when they're unescaped and in the given context.
+Replaces the given pattern only when it's unescaped and in the given context.
 
 ### `getGroupContents`
 
-Given a pattern and start position (just after the group's opening delimiter), return the contents of the group, accounting for escaped characters, nested groups, and character classes. Returns the rest of the string if the group is unclosed.
+Given a regex pattern and start position (just after the group's opening delimiter), return the contents of the group, accounting for escaped characters, nested groups, and character classes. Returns the rest of the string if the group is unclosed.
