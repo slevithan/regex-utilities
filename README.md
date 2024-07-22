@@ -10,7 +10,7 @@ Tiny utilities shared by the [`regex`](https://github.com/slevithan/regex) libra
 
 ### `Context`
 
-Regex syntax context object with the following properties:
+Frozen object with the following properties for tracking regex syntax context:
 
 - `DEFAULT` - Base context.
 - `CHAR_CLASS` - Character class context.

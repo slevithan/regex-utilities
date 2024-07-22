@@ -1,5 +1,22 @@
 import {Context, execUnescaped, forEachUnescaped, getGroupContents, hasUnescaped, replaceUnescaped} from '../src/index.js';
 
+describe('Context', () => {
+  it('should not allow modifying property values', () => {
+    const original = Context.DEFAULT;
+    try {
+      Context.DEFAULT = null;
+    } catch (e) {}
+    expect(Context.DEFAULT).toBe(original);
+  });
+
+  it('should not allow adding properties', () => {
+    try {
+      Context.NEW = 'NEW';
+    } catch (e) {}
+    expect('NEW' in Context).toBeFalse();
+  });
+});
+
 describe('replaceUnescaped', () => {
   it('should replace all with string replacement in all contexts', () => {
     expect(replaceUnescaped(String.raw`.\.\\.\\\.[[\.].].`, '\\.', '~')).toBe(String.raw`~\.\\~\\\.[[\.]~]~`);

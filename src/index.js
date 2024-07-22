@@ -1,7 +1,8 @@
-export const Context = {
+// Constant properties for tracking regex syntax context
+export const Context = Object.freeze({
   DEFAULT: 'DEFAULT',
   CHAR_CLASS: 'CHAR_CLASS',
-};
+});
 
 /**
 Replaces the given pattern only when it's unescaped and in the given context.
