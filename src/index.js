@@ -5,7 +5,8 @@ export const Context = Object.freeze({
 });
 
 /**
-Replaces all unescaped instances of a pattern that are in the given context.
+Replaces all unescaped instances of a regex pattern in the given context, using a replacement
+string or callback.
 
 Doesn't skip over complete multicharacter tokens (only `\` plus its folowing char) so must be used
 with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
@@ -15,12 +16,12 @@ with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode
 @param {'DEFAULT' | 'CHAR_CLASS'} [context] All contexts if not specified
 @returns {string} Updated expression
 @example
-replaceUnescaped(String.raw`.\.\\.[[\.].].`, '\\.', '~');
-// → String.raw`~\.\\~[[\.]~]~`
-replaceUnescaped(String.raw`.\.\\.[[\.].].`, '\\.', '~', Context.DEFAULT);
-// → String.raw`~\.\\~[[\.].]~`
-replaceUnescaped(String.raw`.\.\\.[[\.].].`, '\\.', '~', Context.CHAR_CLASS);
-// → String.raw`.\.\\.[[\.]~].`
+replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~');
+// → '~\\.\\\\~[[\\.]~]~'
+replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~', Context.DEFAULT);
+// → '~\\.\\\\~[[\\.].]~'
+replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~', Context.CHAR_CLASS);
+// → '.\\.\\\\.[[\\.]~].'
 */
 export function replaceUnescaped(expression, needle, replacement, context) {
   const re = new RegExp(`${needle}|(?<skip>\\\\?.)`, 'gsu');
@@ -47,7 +48,7 @@ export function replaceUnescaped(expression, needle, replacement, context) {
 }
 
 /**
-Runs a callback for each unescaped instance of a pattern that is in the given context.
+Runs a callback for each unescaped instance of a regex pattern in the given context.
 
 Doesn't skip over complete multicharacter tokens (only `\` plus its folowing char) so must be used
 with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
@@ -62,8 +63,8 @@ export function forEachUnescaped(expression, needle, callback, context) {
 }
 
 /**
-Returns a match object for the first unescaped instance of a pattern that is in the given context.
-Else, returns `null`.
+Returns a match object for the first unescaped instance of a regex pattern in the given context, or
+`null`.
 
 Doesn't skip over complete multicharacter tokens (only `\` plus its folowing char) so must be used
 with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
@@ -101,7 +102,7 @@ export function execUnescaped(expression, needle, pos = 0, context) {
 }
 
 /**
-Checks whether an unescaped instance of a pattern appears in the given context.
+Checks whether an unescaped instance of a regex pattern appears in the given context.
 
 Doesn't skip over complete multicharacter tokens (only `\` plus its folowing char) so must be used
 with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
@@ -116,10 +117,10 @@ export function hasUnescaped(expression, needle, context) {
 }
 
 /**
-Returns the contents of the group within the given pattern, with the group being identified by the
-position where its contents start (i.e., just *after* the group's opening delimiter). Accounts for
-escaped characters, nested groups, and character classes. Returns the rest of the string if the
-group is unclosed.
+Extracts the full contents of a group (subpattern) from the given expression, accounting for
+escaped characters, nested groups, and character classes. The group is identified by the position
+where its contents start (the string index just after the group's opening delimiter). Returns the
+rest of the string if the group is unclosed.
 
 Assumes UnicodeSets-mode syntax.
 @param {string} expression Search target

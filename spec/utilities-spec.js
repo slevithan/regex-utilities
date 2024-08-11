@@ -37,6 +37,11 @@ describe('replaceUnescaped', () => {
   it('should replace all using a replacement function and named backrefs', () => {
     expect(replaceUnescaped('%1 %22', '%(?<num>\\d+)', ({groups: {num}}) => `\\${num}`)).toBe('\\1 \\22');
   });
+
+  // Just documenting current behavior
+  it('should replace with a literal string (no backreferences) if given a replacement string', () => {
+    expect(replaceUnescaped('ab', '(.)(?<a>.)', '~$1$<a>~')).toBe('~$1$<a>~');
+  });
 });
 
 describe('forEachUnescaped', () => {
