@@ -21,20 +21,20 @@ See documentation in the source code for more details.
 
 ### `execUnescaped`
 
-Return a match object for the first unescaped version of a pattern in the given context, or `null`.
+Returns a match object for the first unescaped instance of a pattern that is in the given context. Else, returns `null`.
 
 ### `hasUnescaped`
 
-Check whether an unescaped version of a pattern appears in the given context.
+Checks whether an unescaped instance of a pattern appears in the given context.
 
 ### `forEachUnescaped`
 
-Run a callback on each unescaped version of a pattern in the given context.
+Runs a callback for each unescaped instance of a pattern that is in the given context.
 
 ### `replaceUnescaped`
 
-Replaces the given pattern only when it's unescaped and in the given context.
+Replaces all unescaped instances of a pattern that are in the given context.
 
 ### `getGroupContents`
 
-Given a regex pattern and start position (just after the group's opening delimiter), return the contents of the group, accounting for escaped characters, nested groups, and character classes. Returns the rest of the string if the group is unclosed.
+Returns the contents of the group within the given pattern, with the group being identified by the position where its contents start (i.e., just *after* the group's opening delimiter). Accounts for escaped characters, nested groups, and character classes. Returns the rest of the string if the group is unclosed.

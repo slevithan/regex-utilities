@@ -5,9 +5,10 @@ export const Context = Object.freeze({
 });
 
 /**
-Replaces the given pattern only when it's unescaped and in the given context.
-Doesn't skip over complete multicharacter tokens (only `\` and folowing char) so must be used with
-knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
+Replaces all unescaped instances of a pattern that are in the given context.
+
+Doesn't skip over complete multicharacter tokens (only `\` plus its folowing char) so must be used
+with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
 @param {string} expression Search target
 @param {string} needle Search as a regex pattern, with flags `su` applied
 @param {string | (match: RegExpExecArray) => string} replacement
@@ -46,9 +47,10 @@ export function replaceUnescaped(expression, needle, replacement, context) {
 }
 
 /**
-Run a callback on each unescaped version of a pattern in the given context.
-Doesn't skip over complete multicharacter tokens (only `\` and folowing char) so must be used with
-knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
+Runs a callback for each unescaped instance of a pattern that is in the given context.
+
+Doesn't skip over complete multicharacter tokens (only `\` plus its folowing char) so must be used
+with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
 @param {string} expression Search target
 @param {string} needle Search as a regex pattern, with flags `su` applied
 @param {(match: RegExpExecArray) => void} callback
@@ -60,9 +62,11 @@ export function forEachUnescaped(expression, needle, callback, context) {
 }
 
 /**
-Return a match object for the first unescaped version of a pattern in the given context, or `null`.
-Doesn't skip over complete multicharacter tokens (only `\` and folowing char) so must be used with
-knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
+Returns a match object for the first unescaped instance of a pattern that is in the given context.
+Else, returns `null`.
+
+Doesn't skip over complete multicharacter tokens (only `\` plus its folowing char) so must be used
+with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
 @param {string} expression Search target
 @param {string} needle Search as a regex pattern, with flags `su` applied
 @param {number} [pos] Offset to start the search
@@ -97,9 +101,10 @@ export function execUnescaped(expression, needle, pos = 0, context) {
 }
 
 /**
-Check whether an unescaped version of a pattern appears in the given context.
-Doesn't skip over complete multicharacter tokens (only `\` and folowing char) so must be used with
-knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
+Checks whether an unescaped instance of a pattern appears in the given context.
+
+Doesn't skip over complete multicharacter tokens (only `\` plus its folowing char) so must be used
+with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
 @param {string} expression Search target
 @param {string} needle Search as a regex pattern, with flags `su` applied
 @param {'DEFAULT' | 'CHAR_CLASS'} [context] All contexts if not specified
@@ -111,9 +116,12 @@ export function hasUnescaped(expression, needle, context) {
 }
 
 /**
-Given a regex pattern and start position (just after the group's opening delimiter), return the
-contents of the group, accounting for escaped characters, nested groups, and character classes.
-Returns the rest of the string if the group is unclosed. Assumes UnicodeSets-mode syntax.
+Returns the contents of the group within the given pattern, with the group being identified by the
+position where its contents start (i.e., just *after* the group's opening delimiter). Accounts for
+escaped characters, nested groups, and character classes. Returns the rest of the string if the
+group is unclosed.
+
+Assumes UnicodeSets-mode syntax.
 @param {string} expression Search target
 @param {number} contentsStartPos
 @returns {string}
