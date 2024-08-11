@@ -1,6 +1,6 @@
 {
   "name": "regex-utilities",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Tiny helpers for processing regex syntax",
   "author": "Steven Levithan",
   "license": "MIT",
