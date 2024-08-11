@@ -16,12 +16,13 @@ with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode
 @param {'DEFAULT' | 'CHAR_CLASS'} [context] All contexts if not specified
 @returns {string} Updated expression
 @example
-replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~');
-// → '~\\.\\\\~[[\\.]~]~'
-replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~', Context.DEFAULT);
-// → '~\\.\\\\~[[\\.].]~'
-replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~', Context.CHAR_CLASS);
-// → '.\\.\\\\.[[\\.]~].'
+const str = '.\\.\\\\.[[\\.].].';
+replaceUnescaped(str, '\\.', '@');
+// → '@\\.\\\\@[[\\.]@]@'
+replaceUnescaped(str, '\\.', '@', Context.DEFAULT);
+// → '@\\.\\\\@[[\\.].]@'
+replaceUnescaped(str, '\\.', '@', Context.CHAR_CLASS);
+// → '.\\.\\\\.[[\\.]@].'
 */
 export function replaceUnescaped(expression, needle, replacement, context) {
   const re = new RegExp(`${needle}|(?<skip>\\\\?.)`, 'gsu');

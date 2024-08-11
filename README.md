@@ -17,33 +17,33 @@ Frozen object with the following properties for tracking regex syntax context:
 
 ## Functions
 
-For all of the following functions, argument `expression` is the target string, and `needle` is the pattern to search for.
+For all of the following functions, argument `expression` is the target string, and `needle` is the regex pattern to search for.
 
-- Argument `expression` is assumed to be a flag-`v`-mode regex pattern string (in other words, nested character classes are allowed when determining the context for a match).
-- Argument `needle` is a regex pattern as a string, and is applied with flags `su`.
-- If argument `context` is not provided, matches are allowed in all contexts (in other words, inside and outside of character classes).
+- Argument `expression` (the string being searched through) is assumed to be a flag-`v`-mode regex pattern string. In other words, nested character classes within it are supported when determining the context for a match.
+- Argument `needle` (the regex pattern being searched for) is provided as a string, and is applied with flags `su`.
+- If argument `context` is not provided, matches are allowed in all contexts. In other words, inside and outside of character classes.
 
 ### `execUnescaped`
 
-Arguments: `expression, needle, [pos = 0], [context]`
+*Arguments: `expression, needle, [pos = 0], [context]`*
 
 Returns a match object for the first unescaped instance of a regex pattern in the given context, or `null`.
 
 ### `hasUnescaped`
 
-Arguments: `expression, needle, [context]`
+*Arguments: `expression, needle, [context]`*
 
 Checks whether an unescaped instance of a regex pattern appears in the given context.
 
 ### `forEachUnescaped`
 
-Arguments: `expression, needle, callback, [context]`
+*Arguments: `expression, needle, callback, [context]`*
 
 Runs a callback for each unescaped instance of a regex pattern in the given context.
 
 ### `replaceUnescaped`
 
-Arguments: `expression, needle, replacement, [context]`
+*Arguments: `expression, needle, replacement, [context]`*
 
 Replaces all unescaped instances of a regex pattern in the given context, using a replacement string or callback.
 
@@ -51,19 +51,18 @@ Replaces all unescaped instances of a regex pattern in the given context, using 
   <summary>Examples</summary>
 
 ```js
-replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~');
-// → '~\\.\\\\~[[\\.]~]~'
-
-replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~', Context.DEFAULT);
-// → '~\\.\\\\~[[\\.].]~'
-
-replaceUnescaped('.\\.\\\\.[[\\.].].', '\\.', '~', Context.CHAR_CLASS);
-// → '.\\.\\\\.[[\\.]~].'
+const str = '.\\.\\\\.[[\\.].].';
+replaceUnescaped(str, '\\.', '@');
+// → '@\\.\\\\@[[\\.]@]@'
+replaceUnescaped(str, '\\.', '@', Context.DEFAULT);
+// → '@\\.\\\\@[[\\.].]@'
+replaceUnescaped(str, '\\.', '@', Context.CHAR_CLASS);
+// → '.\\.\\\\.[[\\.]@].'
 ```
 </details>
 
 ### `getGroupContents`
 
-Arguments: `expression, contentsStartPos`
+*Arguments: `expression, contentsStartPos`*
 
 Extracts the full contents of a group (subpattern) from the given expression, accounting for escaped characters, nested groups, and character classes. The group is identified by the position where its contents start (the string index just after the group's opening delimiter). Returns the rest of the string if the group is unclosed.
