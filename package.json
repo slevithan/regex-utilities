@@ -5,8 +5,17 @@
   "author": "Steven Levithan",
   "license": "MIT",
   "type": "module",
-  "exports": "./src/index.js",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
   "scripts": {
+    "types": "tsc src/index.js --rootDir src --declaration --allowJs --emitDeclarationOnly --outdir types",
+    "prebuild": "rimraf --glob types/*",
+    "build": "npm run types",
+    "pretest": "npm run build",
     "test": "jasmine",
     "prepare": "npm test"
   },
@@ -18,6 +27,8 @@
     "url": "git+https://github.com/slevithan/regex-utilities.git"
   },
   "devDependencies": {
-    "jasmine": "^5.2.0"
+    "jasmine": "^5.2.0",
+    "rimraf": "6.0.1",
+    "typescript": "5.5.4"
   }
 }
