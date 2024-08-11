@@ -1,7 +1,7 @@
 {
   "name": "regex-utilities",
   "version": "2.1.0",
-  "description": "Tiny regex parsing helpers",
+  "description": "Tiny helpers for processing regex syntax",
   "author": "Steven Levithan",
   "license": "MIT",
   "type": "module",
@@ -20,7 +20,8 @@
     "prepare": "npm test"
   },
   "files": [
-    "src"
+    "src",
+    "types"
   ],
   "repository": {
     "type": "git",
