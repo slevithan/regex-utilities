@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/regex-utilities)](https://www.npmjs.com/package/regex-utilities)
 [![bundle size](https://deno.bundlejs.com/badge?q=regex-utilities&treeshake=[*])](https://bundlejs.com/?q=regex-utilities&treeshake=[*])
 
-Tiny utilities shared by the [regex](https://github.com/slevithan/regex) library and its plugins. Useful for parsing and processing regular expression syntax in a lightweight way, when you don't need a full regex AST.
+Tiny utilities that the [regex](https://github.com/slevithan/regex) library makes available for reuse in its plugins. Useful for parsing and processing regular expression syntax in a lightweight way, when you don't need a full regex AST.
 
 ## Constants
 
