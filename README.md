@@ -27,7 +27,7 @@ For all of the following functions, argument `expression` is the target string, 
 
 *Arguments: `expression, needle, replacement, [context]`*
 
-Replaces all unescaped instances of a regex pattern in the given context, using a replacement string or callback function.
+Replaces all unescaped instances of a regex pattern in the given context, using a replacement string or function.
 
 <details>
   <summary>Examples with a replacement string</summary>
@@ -46,7 +46,7 @@ replaceUnescaped(str, '\\.', '@', Context.CHAR_CLASS);
 Details for the `replacement` argument:
 
 - If a string is provided, it's used literally without special handling for backreferences, etc.
-- If a callback function is provided, it receives two arguments:
+- If a function is provided, it receives two arguments:
   1. The match object (which includes `groups`, `index`, etc.).
   2. An object with extended details (`context` and `negated`) about where the match was found.
 
@@ -66,9 +66,7 @@ Checks whether an unescaped instance of a regex pattern appears in the given con
 
 *Arguments: `expression, needle, callback, [context]`*
 
-Runs a callback function for each unescaped instance of a regex pattern in the given context.
-
-Callback functions receive two arguments:
+Runs a function for each unescaped match of a regex pattern in the given context. The function receives two arguments:
 
 1. The match object (which includes `groups`, `index`, etc.).
 2. An object with extended details (`context` and `negated`) about where the match was found.

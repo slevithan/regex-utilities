@@ -11,9 +11,10 @@
       "import": "./src/index.js"
     }
   },
+  "types": "./types/index.d.ts",
   "scripts": {
     "types": "tsc src/index.js --rootDir src --declaration --allowJs --emitDeclarationOnly --outdir types",
-    "prebuild": "rimraf --glob types/*",
+    "prebuild": "rm -rf types/*",
     "build": "npm run types",
     "pretest": "npm run build",
     "test": "jasmine",
@@ -29,7 +30,6 @@
   },
   "devDependencies": {
     "jasmine": "^5.2.0",
-    "rimraf": "6.0.1",
     "typescript": "5.5.4"
   }
 }
