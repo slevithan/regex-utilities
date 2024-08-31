@@ -30,6 +30,10 @@ describe('replaceUnescaped', () => {
     expect(replaceUnescaped(String.raw`.\.\\.\\\.[[\.].].`, '\\.', '~', Context.CHAR_CLASS)).toBe(String.raw`.\.\\.\\\.[[\.]~].`);
   });
 
+  it('should replace with a literal string (no backreferences) if given a replacement string', () => {
+    expect(replaceUnescaped('ab', '(.)(?<a>.)', '~$1$<a>~')).toBe('~$1$<a>~');
+  });
+
   it('should replace all using a replacement function and numbered backrefs', () => {
     expect(replaceUnescaped('%1 %22', '%(\\d+)', ([_, $1]) => `\\${$1}`)).toBe('\\1 \\22');
   });
@@ -38,9 +42,13 @@ describe('replaceUnescaped', () => {
     expect(replaceUnescaped('%1 %22', '%(?<num>\\d+)', ({groups: {num}}) => `\\${num}`)).toBe('\\1 \\22');
   });
 
-  // Just documenting current behavior
-  it('should replace with a literal string (no backreferences) if given a replacement string', () => {
-    expect(replaceUnescaped('ab', '(.)(?<a>.)', '~$1$<a>~')).toBe('~$1$<a>~');
+  it('should provide replacement functions with extended match details as the second argument', () => {
+    const defaultFalse = `${Context.DEFAULT}:false`;
+    const charClassFalse = `${Context.CHAR_CLASS}:false`;
+    const charClassTrue = `${Context.CHAR_CLASS}:true`;
+    expect(replaceUnescaped('.[^.[.].].', '\\.', (_, details) => {
+      return `${details.context}:${details.negated}`;
+    })).toBe(`${defaultFalse}[^${charClassTrue}[${charClassFalse}]${charClassTrue}]${defaultFalse}`);
   });
 });
 
@@ -61,6 +69,20 @@ describe('forEachUnescaped', () => {
     let count = 0;
     forEachUnescaped(String.raw`.\.\\.[[\.].]`, '\\.', () => count++, Context.CHAR_CLASS);
     expect(count).toBe(1);
+  });
+
+  it('should provide callback with extended match details as the second argument', () => {
+    const results = {
+      [Context.DEFAULT]: [],
+      [Context.CHAR_CLASS]: [],
+    };
+    forEachUnescaped('.[^.[.].].', '\\.', (_, details) => {
+      results[details.context].push(details.negated);
+    });
+    expect(results).toEqual({
+      [Context.DEFAULT]: [false, false],
+      [Context.CHAR_CLASS]: [true, false, true],
+    });
   });
 });
 

@@ -12,7 +12,10 @@ Doesn't skip over complete multicharacter tokens (only `\` plus its folowing cha
 with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
 @param {string} expression Search target
 @param {string} needle Search as a regex pattern, with flags `su` applied
-@param {string | (match: RegExpExecArray) => string} replacement
+@param {string | (match: RegExpExecArray, details: {
+  context: 'DEFAULT' | 'CHAR_CLASS';
+  negated: boolean;
+}) => string} replacement
 @param {'DEFAULT' | 'CHAR_CLASS'} [context] All contexts if not specified
 @returns {string} Updated expression
 @example
@@ -25,23 +28,29 @@ replaceUnescaped(str, '\\.', '@', Context.CHAR_CLASS);
 // → '.\\.\\\\.[[\\.]@].'
 */
 export function replaceUnescaped(expression, needle, replacement, context) {
-  const re = new RegExp(`${needle}|(?<skip>\\\\?.)`, 'gsu');
+  const re = new RegExp(String.raw`${needle}|(?<$skip>\[\^?|\\?.)`, 'gsu');
+  const negated = [false];
   let numCharClassesOpen = 0;
   let result = '';
   for (const match of expression.matchAll(re)) {
-    const {0: m, groups: {skip}} = match;
-    if (!skip && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
+    const {0: m, groups: {$skip}} = match;
+    if (!$skip && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
       if (replacement instanceof Function) {
-        result += replacement(match);
+        result += replacement(match, {
+          context: numCharClassesOpen ? Context.CHAR_CLASS : Context.DEFAULT,
+          negated: negated[negated.length - 1],
+        });
       } else {
         result += replacement;
       }
       continue;
     }
-    if (m === '[') {
+    if (m[0] === '[') {
       numCharClassesOpen++;
+      negated.push(m[1] === '^');
     } else if (m === ']' && numCharClassesOpen) {
       numCharClassesOpen--;
+      negated.pop();
     }
     result += m;
   }
@@ -55,7 +64,10 @@ Doesn't skip over complete multicharacter tokens (only `\` plus its folowing cha
 with knowledge of what's safe to do given regex syntax. Assumes UnicodeSets-mode syntax.
 @param {string} expression Search target
 @param {string} needle Search as a regex pattern, with flags `su` applied
-@param {(match: RegExpExecArray) => void} callback
+@param {(match: RegExpExecArray, details: {
+  context: 'DEFAULT' | 'CHAR_CLASS';
+  negated: boolean;
+}) => void} callback
 @param {'DEFAULT' | 'CHAR_CLASS'} [context] All contexts if not specified
 */
 export function forEachUnescaped(expression, needle, callback, context) {
@@ -80,13 +92,13 @@ export function execUnescaped(expression, needle, pos = 0, context) {
   if (!(new RegExp(needle, 'su').test(expression))) {
     return null;
   }
-  const re = new RegExp(`${needle}|(?<skip>\\\\?.)`, 'gsu');
+  const re = new RegExp(`${needle}|(?<$skip>\\\\?.)`, 'gsu');
   re.lastIndex = pos;
   let numCharClassesOpen = 0;
   let match;
   while (match = re.exec(expression)) {
-    const {0: m, groups: {skip}} = match;
-    if (!skip && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
+    const {0: m, groups: {$skip}} = match;
+    if (!$skip && (!context || (context === Context.DEFAULT) === !numCharClassesOpen)) {
       return match;
     }
     if (m === '[') {

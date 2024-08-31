@@ -23,6 +23,33 @@ For all of the following functions, argument `expression` is the target string, 
 - Argument `needle` (the regex pattern being searched for) is provided as a string, and is applied with flags `su`.
 - If argument `context` is not provided, matches are allowed in all contexts. In other words, inside and outside of character classes.
 
+### `replaceUnescaped`
+
+*Arguments: `expression, needle, replacement, [context]`*
+
+Replaces all unescaped instances of a regex pattern in the given context, using a replacement string or callback function.
+
+<details>
+  <summary>Examples with a replacement string</summary>
+
+```js
+const str = '.\\.\\\\.[[\\.].].';
+replaceUnescaped(str, '\\.', '@');
+// → '@\\.\\\\@[[\\.]@]@'
+replaceUnescaped(str, '\\.', '@', Context.DEFAULT);
+// → '@\\.\\\\@[[\\.].]@'
+replaceUnescaped(str, '\\.', '@', Context.CHAR_CLASS);
+// → '.\\.\\\\.[[\\.]@].'
+```
+</details>
+
+Details for the `replacement` argument:
+
+- If a string is provided, it's used literally without special handling for backreferences, etc.
+- If a callback function is provided, it receives two arguments:
+  1. The match object (which includes `groups`, `index`, etc.).
+  2. An object with extended details (`context` and `negated`) about where the match was found.
+
 ### `execUnescaped`
 
 *Arguments: `expression, needle, [pos = 0], [context]`*
@@ -39,27 +66,12 @@ Checks whether an unescaped instance of a regex pattern appears in the given con
 
 *Arguments: `expression, needle, callback, [context]`*
 
-Runs a callback for each unescaped instance of a regex pattern in the given context.
+Runs a callback function for each unescaped instance of a regex pattern in the given context.
 
-### `replaceUnescaped`
+Callback functions receive two arguments:
 
-*Arguments: `expression, needle, replacement, [context]`*
-
-Replaces all unescaped instances of a regex pattern in the given context, using a replacement string or callback.
-
-<details>
-  <summary>Examples</summary>
-
-```js
-const str = '.\\.\\\\.[[\\.].].';
-replaceUnescaped(str, '\\.', '@');
-// → '@\\.\\\\@[[\\.]@]@'
-replaceUnescaped(str, '\\.', '@', Context.DEFAULT);
-// → '@\\.\\\\@[[\\.].]@'
-replaceUnescaped(str, '\\.', '@', Context.CHAR_CLASS);
-// → '.\\.\\\\.[[\\.]@].'
-```
-</details>
+1. The match object (which includes `groups`, `index`, etc.).
+2. An object with extended details (`context` and `negated`) about where the match was found.
 
 ### `getGroupContents`
 
