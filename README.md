@@ -1,8 +1,7 @@
 # regex-utilities
 
-[![build status](https://github.com/slevithan/regex-utilities/workflows/CI/badge.svg)](https://github.com/slevithan/regex-utilities/actions)
-[![npm](https://img.shields.io/npm/v/regex-utilities)](https://www.npmjs.com/package/regex-utilities)
-[![bundle size](https://deno.bundlejs.com/badge?q=regex-utilities&treeshake=[*])](https://bundlejs.com/?q=regex-utilities&treeshake=[*])
+[![npm version][npm-version-src]][npm-version-href]
+[![bundle][bundle-src]][bundle-href]
 
 Tiny utilities that the [regex](https://github.com/slevithan/regex) library makes available for reuse in its plugins. Useful for parsing and processing regular expression syntax in a lightweight way, when you don't need a full regex AST.
 
@@ -76,3 +75,10 @@ Runs a function for each unescaped match of a regex pattern in the given context
 *Arguments: `expression, contentsStartPos`*
 
 Extracts the full contents of a group (subpattern) from the given expression, accounting for escaped characters, nested groups, and character classes. The group is identified by the position where its contents start (the string index just after the group's opening delimiter). Returns the rest of the string if the group is unclosed.
+
+<!-- Badges -->
+
+[npm-version-src]: https://img.shields.io/npm/v/regex-utilities
+[npm-version-href]: https://npmjs.com/package/regex-utilities
+[bundle-src]: https://deno.bundlejs.com/badge?q=regex-utilities&treeshake=[*]
+[bundle-href]: https://bundlejs.com/?q=regex-utilities&treeshake=[*]
