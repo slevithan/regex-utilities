@@ -3,7 +3,7 @@
 [![npm version][npm-version-src]][npm-version-href]
 [![bundle][bundle-src]][bundle-href]
 
-Tiny utilities that the [Regex+](https://github.com/slevithan/regex) library makes available for reuse in its plugins. Useful for parsing and processing regular expression syntax in a lightweight way, when you don't need a full regex AST.
+Tiny utilities that the [Regex+](https://github.com/slevithan/regex) library makes available for reuse in its plugins and elsewhere. Useful for processing JavaScript regular expression syntax in a lightweight way, when you don't need a full regex parser and AST.
 
 ## Constants
 
@@ -28,7 +28,7 @@ For all of the following functions, argument `expression` is the target string, 
 
 Replaces all unescaped instances of a regex pattern in the given context, using a replacement string or function.
 
-<details>
+<details open>
   <summary>Examples with a replacement string</summary>
 
 ```js

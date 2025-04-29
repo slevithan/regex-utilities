@@ -29,7 +29,8 @@
     "url": "git+https://github.com/slevithan/regex-utilities.git"
   },
   "devDependencies": {
-    "jasmine": "^5.4.0",
-    "typescript": "^5.6.3"
-  }
+    "jasmine": "^5.7.0",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@10.10.0"
 }
